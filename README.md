@@ -71,3 +71,19 @@ npm run dev
 GET /inventory/search?q=laptop
 ```
 Search by name, category, or stock status (case-insensitive).
+
+### 🤖 AI Stock Status Suggestion
+
+```http
+POST /ai/suggest-status
+```
+Example Body:
+
+```JSON
+{
+  "name": "iPhone 15",
+  "quantity": 0,
+  "category": "Phones",
+  "details": "Out of stock, high demand"
+}
+```   
