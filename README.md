@@ -56,12 +56,12 @@ npm run dev
 
 ### 🧾 Inventory CRUD
 
-| Method | Endpoint           | Description        |
-|--------|--------------------|--------------------|
-| GET    | `/inventory`       | List all items     |
-| POST   | `/inventory`       | Create new item    |
-| PUT    | `/inventory/:id`   | Update an item     |
-| DELETE | `/inventory/:id`   | Delete an item     |
+| Method | Endpoint         | Description     |
+| ------ | ---------------- | --------------- |
+| GET    | `/inventory`     | List all items  |
+| POST   | `/inventory`     | Create new item |
+| PUT    | `/inventory/:id` | Update an item  |
+| DELETE | `/inventory/:id` | Delete an item  |
 
 ---
 
@@ -70,6 +70,7 @@ npm run dev
 ```http
 GET /inventory/search?q=laptop
 ```
+
 Search by name, category, or stock status (case-insensitive).
 
 ### 🤖 AI Stock Status Suggestion
@@ -77,6 +78,7 @@ Search by name, category, or stock status (case-insensitive).
 ```http
 POST /ai/suggest-status
 ```
+
 Example Body:
 
 ```JSON
@@ -86,4 +88,35 @@ Example Body:
   "category": "Phones",
   "details": "Out of stock, high demand"
 }
-```   
+```
+
+Example Response:
+
+```JSON
+{
+  "suggestion": "Status: ORDERED\nReason: Quantity is 0 and demand is high."
+}
+
+```
+### 🌐 Web Interface
+
+Accessible at: http://localhost:PORT
+
+- Form to add new items
+
+- Search input
+
+- AI button to suggest stock status via OpenAI
+
+### 🧠 AI Integration (OpenAI)
+
+This project uses gpt-3.5-turbo via the OpenAI API.
+
+To enable it:
+
+- Create an OpenAI account
+
+- Get an API key: https://platform.openai.com/api-keys
+
+- Paste the key in your .env file
+
