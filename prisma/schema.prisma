@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model InventoryItem {
+  id        String   @id @default(uuid())
+  name      String
+  quantity  Int
+  category  String
+  details   String?
+  status    Status
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  IN_STOCK
+  LOW_STOCK
+  ORDERED
+  DISCONTINUED
+}
