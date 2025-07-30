@@ -69,3 +69,5 @@ npm run dev
 
 ```http
 GET /inventory/search?q=laptop
+```
+Search by name, category, or stock status (case-insensitive).
