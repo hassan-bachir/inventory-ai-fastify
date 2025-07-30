@@ -13,7 +13,6 @@ A full-featured inventory management system built with **Fastify**, **Prisma**, 
 - 🔍 Search by name, category, or stock status
 - 🤖 AI suggestion for appropriate stock status (via OpenAI API)
 - 🧑‍💻 Simple web UI (EJS-based)
-- 🔐 _(Optional Extra)_ Role-based user access control (planned)
 
 ---
 
@@ -98,6 +97,7 @@ Example Response:
 }
 
 ```
+
 ### 🌐 Web Interface
 
 Accessible at: http://localhost:PORT
@@ -119,4 +119,3 @@ To enable it:
 - Get an API key: https://platform.openai.com/api-keys
 
 - Paste the key in your .env file
-
