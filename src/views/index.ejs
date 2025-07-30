@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory Manager</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+    input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; }
+    button { padding: 10px 15px; margin-right: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>📦 Inventory Manager</h1>
+
+  <form id="add-form">
+    <input name="name" placeholder="Item Name" required />
+    <input name="quantity" type="number" placeholder="Quantity" required />
+    <input name="category" placeholder="Category" required />
+    <textarea name="details" placeholder="Details (optional)"></textarea>
+    <select name="status">
+      <option value="IN_STOCK">In Stock</option>
+      <option value="LOW_STOCK">Low Stock</option>
+      <option value="ORDERED">Ordered</option>
+      <option value="DISCONTINUED">Discontinued</option>
+    </select>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button type="submit">➕ Add Item</button>
+      <button type="button" onclick="suggestStatus()">💡 Suggest Status (AI)</button>
+    </div>
+  </form>
+
+  <hr />
+
+  <h2>🔍 Search Inventory</h2>
+  <input id="search-input" placeholder="Search by name, category or status" />
+  <button onclick="search()">Search</button>
+
+  <table id="results" style="display: none;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Qty</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('add-form');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data.quantity = Number(data.quantity);
+      const res = await fetch('/inventory', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        alert('Item added!');
+        form.reset();
+        search(); 
+      } else {
+        alert('Failed to add item');
+      }
+    });
+
+    async function search() {
+      const q = document.getElementById('search-input').value;
+      const res = await fetch('/inventory/search?q=' + encodeURIComponent(q));
+      const data = await res.json();
+      const table = document.getElementById('results');
+      const tbody = table.querySelector('tbody');
+      tbody.innerHTML = '';
+      if (data.length > 0) {
+        table.style.display = '';
+        data.forEach(item => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${item.name}</td>
+              <td>${item.quantity}</td>
+              <td>${item.category}</td>
+              <td>${item.status}</td>
+              <td>${item.details || ''}</td>
+            </tr>
+          `;
+        });
+      } else {
+        table.style.display = 'none';
+      }
+    }
+
+    async function suggestStatus() {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data.quantity = Number(data.quantity);
+      const res = await fetch('/ai/suggest-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      alert(result.suggestion || 'No suggestion received');
+    }
+  </script>
+</body>
+</html>
