@@ -36,6 +36,7 @@ npm install
 ```bash
 PORT=3000
 OPENAI_API_KEY=your_openai_api_key_here
+JWT_SECRET=supersecret
 ```
 
 ### 4. Initialize the database
@@ -119,3 +120,75 @@ To enable it:
 - Get an API key: https://platform.openai.com/api-keys
 
 - Paste the key in your .env file
+
+### 🔐 User Authentication & Role-Based Access
+
+This app supports basic user authentication with JWT and role-based access (ADMIN / USER).
+
+#### 👥 User Roles
+
+- `USER`: Can add/search/view items
+- `ADMIN`: Can delete or perform admin-only actions (if enabled)
+
+---
+
+#### 📬 Register a User
+
+```http
+POST /auth/register
+
+```
+
+Body:
+
+```http
+{
+  "email": "admin@example.com",
+  "password": "password123",
+  "role": "ADMIN"
+}
+```
+
+#### 🔐 Login to Get Token
+
+Route :
+
+```http
+POST /auth/login
+```
+
+```JSON
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+```
+
+Response:
+
+```JSON
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+}
+```
+
+#### 🔐 Access Protected Routes
+
+Include the token in headers:
+
+```http
+Authorization: Bearer <your_token_here>
+```
+
+Example using fetch:
+
+```http
+fetch('/inventory', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_token_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ ... })
+});
+```
