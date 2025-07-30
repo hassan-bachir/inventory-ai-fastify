@@ -52,8 +52,7 @@ export default async function inventoryRoutes(fastify, opts) {
     });
     return results;
   });
-}
-fastify.post('/ai/suggest-status', async (req, reply) => {
+  fastify.post('/ai/suggest-status', async (req, reply) => {
   const { name, quantity, category, details } = req.body;
 
   const prompt = `You are an inventory assistant. Based on the following item details, suggest the most appropriate stock status (IN_STOCK, LOW_STOCK, ORDERED, DISCONTINUED) and explain why.
@@ -78,3 +77,5 @@ Respond with status and a short explanation.`;
     reply.status(500).send({ error: 'AI failed', details: err.message });
   }
 });
+}
+
