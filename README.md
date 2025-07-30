@@ -182,7 +182,7 @@ Authorization: Bearer <your_token_here>
 
 Example using fetch:
 
-```http
+```bash
 fetch('/inventory', {
   method: 'POST',
   headers: {
@@ -191,4 +191,5 @@ fetch('/inventory', {
   },
   body: JSON.stringify({ ... })
 });
+
 ```
