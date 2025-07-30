@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import OpenAI from 'openai';
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const prisma = new PrismaClient();
 
@@ -51,3 +53,28 @@ export default async function inventoryRoutes(fastify, opts) {
     return results;
   });
 }
+fastify.post('/ai/suggest-status', async (req, reply) => {
+  const { name, quantity, category, details } = req.body;
+
+  const prompt = `You are an inventory assistant. Based on the following item details, suggest the most appropriate stock status (IN_STOCK, LOW_STOCK, ORDERED, DISCONTINUED) and explain why.
+
+Item:
+- Name: ${name}
+- Quantity: ${quantity}
+- Category: ${category}
+- Details: ${details || "N/A"}
+
+Respond with status and a short explanation.`;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+    });
+
+    const response = completion.choices[0].message.content;
+    return { suggestion: response };
+  } catch (err) {
+    reply.status(500).send({ error: 'AI failed', details: err.message });
+  }
+});
