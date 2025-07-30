@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import inventoryRoutes from './routes/inventory.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import authRoutes from './routes/auth.js';
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,6 +12,7 @@ const __dirname = path.dirname(__filename);
 const fastify = Fastify({ logger: true });
 
 const ejs = await import('ejs');
+fastify.register(authRoutes);
 
 fastify.register(import('@fastify/view'), {
   engine: { ejs },
@@ -24,6 +25,8 @@ fastify.register(import('@fastify/static'), {
 });
 fastify.register(import('@fastify/cors'));
 fastify.register(inventoryRoutes);
+
+
 
 fastify.get('/', async (req, reply) => {
   return reply.view('index.ejs');

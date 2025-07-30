@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export default async function inventoryRoutes(fastify, opts) {
   // Get all inventory
-  fastify.get('/inventory', async (req, reply) => {
+  fastify.get('/inventory', { preHandler: verifyToken }, async (req, reply) => {
     const items = await prisma.inventoryItem.findMany();
     return items;
   });
@@ -32,7 +32,7 @@ export default async function inventoryRoutes(fastify, opts) {
   });
 
   // Delete item
-  fastify.delete('/inventory/:id', async (req, reply) => {
+  fastify.delete('/inventory/:id', { preHandler: verifyToken }, async (req, reply) => {
     const { id } = req.params;
     await prisma.inventoryItem.delete({ where: { id } });
     return { message: 'Deleted' };
@@ -52,6 +52,8 @@ export default async function inventoryRoutes(fastify, opts) {
     });
     return results;
   });
+
+  // AI Suggest Status
   fastify.post('/ai/suggest-status', async (req, reply) => {
   const { name, quantity, category, details } = req.body;
 
