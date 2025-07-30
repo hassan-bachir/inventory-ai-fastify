@@ -51,3 +51,21 @@ npx prisma migrate dev --name init
 ```bash
 npm run dev
 ```
+
+## 📡 API Endpoints
+
+### 🧾 Inventory CRUD
+
+| Method | Endpoint           | Description        |
+|--------|--------------------|--------------------|
+| GET    | `/inventory`       | List all items     |
+| POST   | `/inventory`       | Create new item    |
+| PUT    | `/inventory/:id`   | Update an item     |
+| DELETE | `/inventory/:id`   | Delete an item     |
+
+---
+
+### 🔍 Search Inventory
+
+```http
+GET /inventory/search?q=laptop
